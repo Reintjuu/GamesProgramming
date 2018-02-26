@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlTypes;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -35,40 +35,33 @@ namespace Week2
 
 			// Draw X-Axis.
 			var vb = ViewportTransformation(Width, Height, _xAxis.Vb);
-			_xAxis.Draw(e.Graphics, vb);
+			_xAxis.Draw(e.Graphics, vb.ToList());
 
 			// Draw Y-Axis.
 			vb = ViewportTransformation(Width, Height, _yAxis.Vb);
-			_yAxis.Draw(e.Graphics, vb);
+			_yAxis.Draw(e.Graphics, vb.ToList());
 			
-			// Clear the buffer and apply transformation.
-			vb = new List<Vector>();
-			vb = ApplyTransformation(transformation, vb); 
+			// Set the buffer to a transformed square.
+			vb = ApplyTransformation(transformation, _square.Vb); 
 			
 			// Update the buffer for displaying based on the current viewport.
 			vb = ViewportTransformation(Width, Height, vb);
-			
-			// Draw the square.
-			_square.Draw(e.Graphics, vb);
+			_square.Draw(e.Graphics, vb.ToList());
 		}
 
-		private List<Vector> ApplyTransformation(Matrix transformation, List<Vector> vb)
+		private IEnumerable<Vector> ApplyTransformation(Matrix transformation, IEnumerable<Vector> vb)
 		{
-			foreach (var v in _square.Vb)
-			{
-				vb.Add(transformation * v);
-			}
-
-			return vb;
+			return vb.Select(v => transformation * v);
 		}
 		
-		private static List<Vector> ViewportTransformation(float width, float height, IEnumerable<Vector> vb)
+		private static IEnumerable<Vector> ViewportTransformation(float width, float height, IEnumerable<Vector> vb)
 		{
-			float cx = width / 2;
-			float cy = height / 2;
-			return vb
-				.Select(v => new Vector(v.X + cx, cy - v.Y, 1))
-				.ToList();
+			return vb.Select(v => new Vector(v.X + width / 2, height / 2 - v.Y, 0));
+		}
+
+		private static IEnumerable<Vector> ViewportTransformation3D(IEnumerable<Vector> vb)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
