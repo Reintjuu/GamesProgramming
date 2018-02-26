@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CEBF5621-2975-4B70-87D1-CD251B606364}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Week2</RootNamespace>
     <AssemblyName>Week2</AssemblyName>
@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AxisX.cs" />
-    <Compile Include="AxisY.cs" />
+    <Compile Include="XAxis.cs" />
+    <Compile Include="YAxis.cs" />
     <Compile Include="Form1.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Program.cs" />

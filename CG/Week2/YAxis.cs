@@ -3,11 +3,11 @@ using System.Drawing;
 
 namespace Week2
 {
-	public class AxisY
+	public class YAxis
 	{
 		public List<Vector> Vb { get; set; }
 
-		public AxisY(int size = 100)
+		public YAxis(int size = 100)
 		{
 			Vb = new List<Vector>
 			{

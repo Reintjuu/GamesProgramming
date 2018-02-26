@@ -26,25 +26,30 @@ namespace Week2
 			_matrix = matrix;
 		}
 
-		public Matrix(float m11, float m12, float m21, float m22)
+		public Matrix(	float m11, float m12, float m13,
+						float m21, float m22, float m23,
+						float m31, float m32, float m33)
 		{
-			_matrix = new float[2, 2];
+			_matrix = new float[3, 3];
 			_matrix[0, 0] = m11;
 			_matrix[0, 1] = m12;
+			_matrix[0, 2] = m13;
 			_matrix[1, 0] = m21;
 			_matrix[1, 1] = m22;
-
-			Console.WriteLine(this);
+			_matrix[1, 2] = m23;
+			_matrix[2, 0] = m31;
+			_matrix[2, 1] = m32;
+			_matrix[2, 2] = m33;
 		}
 
-		public Matrix(Vector v) : this(v.X, 0, v.Y, 0)
+		public Matrix(Vector v) : this(v.X, 0, 0, v.Y, 0, 0, v.W, 0, 0)
 		{
 		}
 
 		public Vector ToVector()
 		{
 			return new Vector(_matrix[0, 0], _matrix[1, 0]);
-		}
+	}
 
 		public static Matrix operator +(Matrix m1, Matrix m2)
 		{
@@ -136,7 +141,9 @@ namespace Week2
 
 		public static Matrix Identity()
 		{
-			return new Matrix(1f, 0f, 0f, 1f);
+			return new Matrix(	1f, 0f, 0f,
+								0f, 1f, 0f,
+								0f, 0f, 1f);
 		}
 
 		public static Matrix Scale(float s)
@@ -147,9 +154,16 @@ namespace Week2
 		public static Matrix Rotate(float degrees)
 		{
 			var rad = Math.PI / 180 * degrees;
-			return new Matrix(
-				(float) Math.Cos(rad), -(float) Math.Sin(rad),
-				(float) Math.Sin(rad), (float) Math.Cos(rad));
+			return new Matrix(	(float) Math.Cos(rad), -(float) Math.Sin(rad), 0f,
+								(float) Math.Sin(rad), (float) Math.Cos(rad), 0f,
+								0f, 0f, 1f);
+		}
+
+		public static Matrix Translate(Vector t)
+		{
+			return new Matrix(	1f, 0f, t.X,
+								0f, 1f, t.Y,
+								0f, 0f, 1f);
 		}
 
 		public override string ToString()

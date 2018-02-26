@@ -8,8 +8,8 @@ namespace Week2
 {
 	public class Form1 : Form
 	{
-		private readonly AxisX _xAxis;
-		private readonly AxisY _yAxis;
+		private readonly XAxis _xAxis;
+		private readonly YAxis _yAxis;
 		private readonly Square _square;
 
 		public Form1()
@@ -17,46 +17,51 @@ namespace Week2
 			Width = 800;
 			Height = 600;
 
-			_xAxis = new AxisX(200);
-			_yAxis = new AxisY(200);
-			_square = new Square(Color.Purple, 100);
+			_xAxis = new XAxis(200);
+			_yAxis = new YAxis(200);
+			_square = new Square(Color.Purple);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			var rotateMatrix = Matrix.Rotate(20);
-			var scaleMatrix = Matrix.Scale(1.5f);
+			var t = Matrix.Translate(new Vector(100, 0));
+			var r = Matrix.Rotate(20);
+			var s = Matrix.Scale(1.5f);
+
+			// First apply translation to avoid translation relative to the rotation or scale.
+			var transformation = s * r * t;
 			
 			base.OnPaint(e);
 
+			// Draw X-Axis.
 			var vb = ViewportTransformation(Width, Height, _xAxis.Vb);
 			_xAxis.Draw(e.Graphics, vb);
 
+			// Draw Y-Axis.
 			vb = ViewportTransformation(Width, Height, _yAxis.Vb);
 			_yAxis.Draw(e.Graphics, vb);
-
-			vb = ViewportTransformation(Width, Height, _square.Vb);
-			_square.Draw(e.Graphics, vb);
-
+			
+			// Clear the buffer and apply transformation.
 			vb = new List<Vector>();
-			foreach (var v in _square.Vb)
-			{
-				vb.Add(rotateMatrix * v);
-			}
+			vb = ApplyTransformation(transformation, vb); 
 			
+			// Update the buffer for displaying based on the current viewport.
 			vb = ViewportTransformation(Width, Height, vb);
-			_square.Draw(e.Graphics, vb);
 			
-			vb = new List<Vector>();
-			foreach (var v in _square.Vb)
-			{
-				vb.Add(scaleMatrix * v);
-			}
-			
-			vb = ViewportTransformation(Width, Height, vb);
+			// Draw the square.
 			_square.Draw(e.Graphics, vb);
 		}
 
+		private List<Vector> ApplyTransformation(Matrix transformation, List<Vector> vb)
+		{
+			foreach (var v in _square.Vb)
+			{
+				vb.Add(transformation * v);
+			}
+
+			return vb;
+		}
+		
 		private static List<Vector> ViewportTransformation(float width, float height, IEnumerable<Vector> vb)
 		{
 			float cx = width / 2;

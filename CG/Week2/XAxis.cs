@@ -3,11 +3,11 @@ using System.Drawing;
 
 namespace Week2
 {
-	public class AxisX
+	public class XAxis
 	{
 		public List<Vector> Vb { get; set; }
 
-		public AxisX(int size = 100)
+		public XAxis(int size = 100)
 		{
 			Vb = new List<Vector>
 			{

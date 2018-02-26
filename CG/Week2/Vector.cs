@@ -6,11 +6,13 @@ namespace Week2
 	{
 		public float X { get; set; }
 		public float Y { get; set; }
+		public float W { get; set; }
 
 		public Vector(float x, float y)
 		{
 			X = x;
 			Y = y;
+			W = 1;
 		}
 
 		public static Vector operator +(Vector first, Vector second)
@@ -20,7 +22,7 @@ namespace Week2
 
 		public override string ToString()
 		{
-			return $"X: {X}, Y: {Y}";
+			return $"X: {X}, Y: {Y}, W: {W}";
 		}
 
 		public double Theta()
