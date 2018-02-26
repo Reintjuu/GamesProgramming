@@ -18,10 +18,10 @@ namespace Week2
 
 			Vb = new List<Vector>
 			{
-				new Vector(-size, -size),
-				new Vector(size, -size),
-				new Vector(size, size),
-				new Vector(-size, size)
+				new Vector(-size, -size, 0),
+				new Vector(size, -size, 0),
+				new Vector(size, size, 0),
+				new Vector(-size, size, 0)
 			};
 		}
 

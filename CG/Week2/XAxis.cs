@@ -11,8 +11,8 @@ namespace Week2
 		{
 			Vb = new List<Vector>
 			{
-				new Vector(0, 0),
-				new Vector(size, 0)
+				new Vector(0, 0, 0),
+				new Vector(size, 0, 0)
 			};
 		}
 

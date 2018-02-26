@@ -24,8 +24,8 @@ namespace Week2
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			var t = Matrix.Translate(new Vector(100, 0));
-			var r = Matrix.Rotate(20);
+			var t = Matrix.Translate(new Vector(100, 0, 0));
+			var r = Matrix.RotateZ(20);
 			var s = Matrix.Scale(1.5f);
 
 			// First apply translation to avoid translation relative to the rotation or scale.
@@ -67,7 +67,7 @@ namespace Week2
 			float cx = width / 2;
 			float cy = height / 2;
 			return vb
-				.Select(v => new Vector(v.X + cx, cy - v.Y))
+				.Select(v => new Vector(v.X + cx, cy - v.Y, 1))
 				.ToList();
 		}
 	}
