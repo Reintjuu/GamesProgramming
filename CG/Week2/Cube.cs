@@ -17,7 +17,7 @@ namespace Week2
 		private const int Size = 1;
 		private readonly Color _color;
 
-		public List<Vector> Vb = new List<Vector>
+		public readonly List<Vector> Vb = new List<Vector>
 		{
 			new Vector(1.0f, 1.0f, 1.0f), //1
 			new Vector(1.0f, -1.0f, 1.0f), //2

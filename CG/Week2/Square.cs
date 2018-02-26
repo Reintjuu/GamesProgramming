@@ -7,7 +7,7 @@ namespace Week2
 	public class Square
 	{
 		public List<Vector> Vb { get; set; }
-		
+
 		private readonly Color _color;
 		private readonly float _weight;
 

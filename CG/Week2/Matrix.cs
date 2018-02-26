@@ -164,45 +164,46 @@ namespace Week2
 		{
 			return s * Identity();
 		}
-		
+
 		public static Matrix RotateX(float degrees)
 		{
 			double radians = Math.PI / 180 * degrees;
 			float cos = (float) Math.Cos(radians);
 			float sin = (float) Math.Sin(radians);
-			
+
 			return new Matrix(
 				1f, 0f, 0f, 0f,
 				0f, cos, -sin, 0f,
 				0f, sin, cos, 0f,
 				0f, 0f, 0f, 1f);
 		}
-		
+
 		public static Matrix RotateY(float degrees)
 		{
 			double radians = Math.PI / 180 * degrees;
 			float cos = (float) Math.Cos(radians);
 			float sin = (float) Math.Sin(radians);
-			
+
 			return new Matrix(
 				cos, 0f, sin, 0f,
 				0, 1, 0f, 0f,
 				-sin, 0f, cos, 0f,
 				0f, 0f, 0f, 1f);
 		}
-		
+
 		public static Matrix RotateZ(float degrees)
 		{
 			double radians = Math.PI / 180 * degrees;
 			float cos = (float) Math.Cos(radians);
 			float sin = (float) Math.Sin(radians);
-			
+
 			return new Matrix(
 				cos, -sin, 0f, 0f,
 				sin, cos, 0f, 0f,
 				0f, 0f, 1f, 0f,
 				0f, 0f, 0f, 1f);
 		}
+
 		public static Matrix Translate(Vector t)
 		{
 			return new Matrix(
@@ -210,6 +211,30 @@ namespace Week2
 				0f, 1f, 0f, t.Y,
 				0f, 0f, 1f, t.Z,
 				0f, 0f, 0f, 1f);
+		}
+
+		public static Matrix View(float r, float theta, float phi)
+		{
+			float cosTheta = (float) Math.Cos(theta);
+			float sinTheta = (float) Math.Sin(theta);
+			float cosPhi = (float) Math.Cos(phi);
+			float sinPhi = (float) Math.Sin(phi);
+
+			return new Matrix(
+				-sinTheta, cosTheta, 0f, 0f,
+				-cosTheta * cosPhi, -cosPhi * sinTheta, sinPhi, 0f,
+				cosTheta * sinPhi, sinTheta * sinPhi, cosPhi, -r,
+				0f, 0f, 0f, 1f);
+		}
+
+		public static Matrix Projection(float d, float z)
+		{
+			float p = -(d / z);
+			return new Matrix(
+				p, 0f, 0f, 0f,
+				0f, p, 0f, 0f,
+				0f, 0f, 0f, 0f,
+				0f, 0f, 0f, 0f);
 		}
 
 		public override string ToString()
