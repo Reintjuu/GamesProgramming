@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Week2
 {
@@ -14,7 +15,6 @@ namespace Week2
 		//      |/         |/                  y
 		//      8----------5
 
-		private const int Size = 1;
 		private readonly Color _color;
 
 		public readonly List<Vector> Vb = new List<Vector>
@@ -47,7 +47,7 @@ namespace Week2
 
 		public void Draw(Graphics g, List<Vector> vb)
 		{
-			Pen pen = new Pen(_color, 3f);
+			Pen pen = new Pen(_color, 2f);
 			g.DrawLine(pen, vb[0].X, vb[0].Y, vb[1].X, vb[1].Y); //1 -> 2
 			g.DrawLine(pen, vb[1].X, vb[1].Y, vb[2].X, vb[2].Y); //2 -> 3
 			g.DrawLine(pen, vb[2].X, vb[2].Y, vb[3].X, vb[3].Y); //3 -> 4
@@ -58,7 +58,7 @@ namespace Week2
 			g.DrawLine(pen, vb[6].X, vb[6].Y, vb[7].X, vb[7].Y); //7 -> 8
 			g.DrawLine(pen, vb[7].X, vb[7].Y, vb[4].X, vb[4].Y); //8 -> 5
 
-			//pen.DashStYle = DashStYle.DashDot;
+//			pen.DashStyle = DashStyle.DashDot;
 			g.DrawLine(pen, vb[0].X, vb[0].Y, vb[4].X, vb[4].Y); //1 -> 5
 			g.DrawLine(pen, vb[1].X, vb[1].Y, vb[5].X, vb[5].Y); //2 -> 6
 			g.DrawLine(pen, vb[2].X, vb[2].Y, vb[6].X, vb[6].Y); //3 -> 7
