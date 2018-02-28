@@ -7,38 +7,59 @@ namespace Week2
 {
 	public sealed class Form1 : Form
 	{
+		public const float StartR = 10;
+		public const float StartTheta = -100f;
+		public const float StartPhi = -10f;
+		
+		public float R;
+		public float Theta;
+		public float Phi;
+		
+		public Matrix RotationMatrix;
+		public Matrix ScaleMatrix;
+		public Matrix TranslationMatrix;
+		
 		private readonly XAxis _xAxis;
 		private readonly YAxis _yAxis;
 		private readonly ZAxis _zAxis;
 		private readonly Cube _cube;
-
-		private Matrix _rotation;
-		private Matrix _scale;
-		private Matrix _translation;
+		private readonly Animator _animator;
 
 		public Form1()
 		{
+			Text = "Reinier";
 			Width = 800;
 			Height = 600;
 			DoubleBuffered = true;
-			
-			KeyPreview = true;
-			KeyDown += Form1_KeyDown;
 
-			_scale = Matrix.Identity();
-			_rotation = Matrix.Identity();
-			_translation = Matrix.Identity();
+			KeyPreview = true;
+			KeyDown += OnKeyDown;
 
 			_xAxis = new XAxis(3);
 			_yAxis = new YAxis(3);
 			_zAxis = new ZAxis(3);
 			_cube = new Cube(Color.Purple);
+
+			_animator = new Animator(this);
+			
+			SetInitialValues();
+		}
+
+		private void SetInitialValues()
+		{
+			ScaleMatrix = Matrix.Identity();
+			RotationMatrix = Matrix.Identity();
+			TranslationMatrix = Matrix.Identity();
+
+			R = StartR;
+			Theta = StartTheta;
+			Phi = StartPhi;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			// Lastly apply translation to avoid translation relative to the rotation or scale.
-			var transformation = _translation * _rotation * _scale;
+			var transformation = TranslationMatrix * RotationMatrix * ScaleMatrix;
 
 			base.OnPaint(e);
 
@@ -71,54 +92,66 @@ namespace Week2
 			return vb.Select(v => new Vector(v.X + width / 2, height / 2 - v.Y, 0));
 		}
 
-		private static IEnumerable<Vector> ViewportTransformation3D(float width, float height, IEnumerable<Vector> vb)
+		private IEnumerable<Vector> ViewportTransformation3D(float width, float height, IEnumerable<Vector> vb)
 		{
 			return vb.Select(v =>
 			{
-				var viewMatrix = Matrix.View(10, -100, -10) * v;
+				var viewMatrix = Matrix.View(R, Theta, Phi) * v;
 				var projectionMatrix = Matrix.Projection(800, viewMatrix.Z) * viewMatrix;
 				return new Vector(projectionMatrix.X + width / 2, projectionMatrix.Y + height / 2, 0);
 			});
 		}
 
-		private void Form1_KeyDown(object sender, KeyEventArgs e)
+		private void OnKeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.KeyCode == Keys.C)
+			{
+				SetInitialValues();
+				_animator.ResetAnimation();
+			}
+			
+			if (_animator.IsAnimating)
+			{
+				return;
+			}
+			
 			int modifier = e.Modifiers == Keys.Shift ? -1 : 1;
 			switch (e.KeyCode)
 			{
 				case Keys.Left:
-					_translation *= Matrix.Translate(new Vector(0f, -.1f, 0f));
+					TranslationMatrix *= Matrix.Translate(new Vector(0f, -.1f, 0f));
 					break;
 				case Keys.Right:
-					_translation *= Matrix.Translate(new Vector(0f, .1f, 0f));
+					TranslationMatrix *= Matrix.Translate(new Vector(0f, .1f, 0f));
 					break;
 				case Keys.Up:
-					_translation *= Matrix.Translate(new Vector(-.1f, 0f, 0f));
+					TranslationMatrix *= Matrix.Translate(new Vector(-.1f, 0f, 0f));
 					break;
 				case Keys.Down:
-					_translation *= Matrix.Translate(new Vector(.1f, 0f, 0f));
+					TranslationMatrix *= Matrix.Translate(new Vector(.1f, 0f, 0f));
 					break;
 				case Keys.PageUp:
-					_translation *= Matrix.Translate(new Vector(0f, 0f, -.1f));
+					TranslationMatrix *= Matrix.Translate(new Vector(0f, 0f, -.1f));
 					break;
 				case Keys.PageDown:
-					_translation *= Matrix.Translate(new Vector(0f, 0f, .1f));
+					TranslationMatrix *= Matrix.Translate(new Vector(0f, 0f, .1f));
 					break;
 				case Keys.X:
-					_rotation *= Matrix.RotateX(5 * modifier);
+					RotationMatrix *= Matrix.RotateX(5 * modifier);
 					break;
 				case Keys.Y:
-					_rotation *= Matrix.RotateY(5 * modifier);
+					RotationMatrix *= Matrix.RotateY(5 * modifier);
 					break;
 				case Keys.Z:
-					_rotation *= Matrix.RotateZ(5 * modifier);
+					RotationMatrix *= Matrix.RotateZ(5 * modifier);
 					break;
 				case Keys.S:
 					var s = e.Modifiers == Keys.Shift ? .9f : 1.1f;
-					_scale *= Matrix.Scale(s);
+					ScaleMatrix *= Matrix.Scale(s);
 					break;
-				case Keys.C:
-					_translation = _rotation = _scale = Matrix.Identity();
+				case Keys.A:
+					SetInitialValues();
+					_animator.StartAnimation();
 					break;
 			}
 
