@@ -119,16 +119,16 @@ namespace Week2
 			switch (e.KeyCode)
 			{
 				case Keys.Left:
-					TranslationMatrix *= Matrix.Translate(new Vector(0f, -.1f, 0f));
-					break;
-				case Keys.Right:
-					TranslationMatrix *= Matrix.Translate(new Vector(0f, .1f, 0f));
-					break;
-				case Keys.Up:
 					TranslationMatrix *= Matrix.Translate(new Vector(-.1f, 0f, 0f));
 					break;
-				case Keys.Down:
+				case Keys.Right:
 					TranslationMatrix *= Matrix.Translate(new Vector(.1f, 0f, 0f));
+					break;
+				case Keys.Up:
+					TranslationMatrix *= Matrix.Translate(new Vector(0, .1f, 0f));
+					break;
+				case Keys.Down:
+					TranslationMatrix *= Matrix.Translate(new Vector(0f, -.1f, 0f));
 					break;
 				case Keys.PageUp:
 					TranslationMatrix *= Matrix.Translate(new Vector(0f, 0f, -.1f));
