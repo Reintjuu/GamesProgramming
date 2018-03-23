@@ -10,20 +10,22 @@ namespace Week2
 		public const float StartR = 10;
 		public const float StartTheta = -100f;
 		public const float StartPhi = -10f;
-		
+
 		public float R;
+		public float D;
 		public float Theta;
 		public float Phi;
-		
+
 		public Matrix RotationMatrix;
 		public Matrix ScaleMatrix;
 		public Matrix TranslationMatrix;
-		
+
 		private readonly XAxis _xAxis;
 		private readonly YAxis _yAxis;
 		private readonly ZAxis _zAxis;
 		private readonly Cube _cube;
 		private readonly Animator _animator;
+		private float _currentScale;
 
 		public Form1()
 		{
@@ -41,7 +43,7 @@ namespace Week2
 			_cube = new Cube(Color.Purple);
 
 			_animator = new Animator(this);
-			
+
 			SetInitialValues();
 		}
 
@@ -50,8 +52,10 @@ namespace Week2
 			ScaleMatrix = Matrix.Identity();
 			RotationMatrix = Matrix.Identity();
 			TranslationMatrix = Matrix.Identity();
+			_currentScale = 1;
 
 			R = StartR;
+			D = 800;
 			Theta = StartTheta;
 			Phi = StartPhi;
 		}
@@ -62,6 +66,7 @@ namespace Week2
 			var transformation = TranslationMatrix * RotationMatrix * ScaleMatrix;
 
 			base.OnPaint(e);
+			e.Graphics.DrawString(ToString(), new Font("Comic Sans MS", 16), Brushes.Chocolate, 10, 10);
 
 			// Draw X-Axis.
 			var vb = ViewportTransformation3D(Width, Height, _xAxis.Vb);
@@ -96,9 +101,9 @@ namespace Week2
 		{
 			return vb.Select(v =>
 			{
-				var viewMatrix = Matrix.View(R, Theta, Phi) * v;
-				var projectionMatrix = Matrix.Projection(800, viewMatrix.Z) * viewMatrix;
-				return new Vector(projectionMatrix.X + width / 2, -projectionMatrix.Y + height / 2, 0);
+				Vector view = Matrix.View(R, Theta, Phi) * v;
+				Vector projectionView = Matrix.Projection(D, view.Z) * view;
+				return new Vector(projectionView.X + width / 2, -projectionView.Y + height / 2, 0);
 			});
 		}
 
@@ -109,12 +114,12 @@ namespace Week2
 				SetInitialValues();
 				_animator.ResetAnimation();
 			}
-			
+
 			if (_animator.IsAnimating)
 			{
 				return;
 			}
-			
+
 			int modifier = e.Modifiers == Keys.Shift ? -1 : 1;
 			switch (e.KeyCode)
 			{
@@ -146,16 +151,37 @@ namespace Week2
 					RotationMatrix *= Matrix.RotateZ(5 * modifier);
 					break;
 				case Keys.S:
-					var s = e.Modifiers == Keys.Shift ? .9f : 1.1f;
-					ScaleMatrix *= Matrix.Scale(s);
+					_currentScale += modifier * .01f;
+					ScaleMatrix = Matrix.Scale(_currentScale);
 					break;
 				case Keys.A:
 					SetInitialValues();
 					_animator.StartAnimation();
 					break;
+				case Keys.R:
+					R += modifier * 1;
+					break;
+				case Keys.D:
+					D += modifier * 1;
+					break;
+				case Keys.P:
+					Phi += modifier * 1;
+					break;
+				case Keys.T:
+					Theta += modifier * 1;
+					break;
 			}
 
 			Invalidate();
+		}
+
+		public override string ToString()
+		{
+			return $"r:\t{R}\n" +
+			       $"d:\t{D}\n" +
+			       $"phi:\t{Phi}\n" +
+			       $"theta:\t{Theta}\n\n" +
+			       $"Phase:\t{_animator.Phase / 2 + 1}";
 		}
 	}
 }

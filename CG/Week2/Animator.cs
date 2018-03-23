@@ -6,11 +6,11 @@ namespace Week2
 	public class Animator
 	{
 		public bool IsAnimating => _timer.Enabled;
+		public int Phase;
 		
 		private readonly Form1 _form;
 		private readonly Timer _timer;
 		
-		private int _phase;
 		private float _currentScale;
 		private float _currentRotationX;
 		private float _currentRotationY;
@@ -32,7 +32,7 @@ namespace Week2
 
 		private void SetInitialValues()
 		{
-			_phase = 0;
+			Phase = 0;
 			_currentScale = 1f;
 			_currentRotationX = 0f;
 			_currentRotationY = 0f;
@@ -53,30 +53,30 @@ namespace Week2
 
 		private void Animate(object sender, EventArgs e)
 		{
-			switch (_phase)
+			switch (Phase)
 			{
 				case 0:
-					_form.ScaleMatrix = AnimateValue(Matrix.Scale, ref _currentScale, .01f, 1.49f, () => _phase++);
+					_form.ScaleMatrix = AnimateValue(Matrix.Scale, ref _currentScale, .01f, 1.49f, () => Phase++);
 					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 1:
-					_form.ScaleMatrix = AnimateValue(Matrix.Scale, ref _currentScale, -.01f, 1f, () => _phase++);
+					_form.ScaleMatrix = AnimateValue(Matrix.Scale, ref _currentScale, -.01f, 1f, () => Phase++);
 					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 2:
-					_form.RotationMatrix = AnimateValue(Matrix.RotateX, ref _currentRotationX, 1, 45, () => _phase++);
+					_form.RotationMatrix = AnimateValue(Matrix.RotateX, ref _currentRotationX, 1, 45, () => Phase++);
 					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 3:
-					_form.RotationMatrix = AnimateValue(Matrix.RotateX, ref _currentRotationX, -1, 0, () => _phase++);
+					_form.RotationMatrix = AnimateValue(Matrix.RotateX, ref _currentRotationX, -1, 0, () => Phase++);
 					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 4:
-					_form.RotationMatrix = AnimateValue(Matrix.RotateY, ref _currentRotationY, 1, 45, () => _phase++);
+					_form.RotationMatrix = AnimateValue(Matrix.RotateY, ref _currentRotationY, 1, 45, () => Phase++);
 					_form.Phi = AnimateValue(f => f, ref _currentPhi, 1, float.PositiveInfinity);
 					break;
 				case 5:
-					_form.RotationMatrix = AnimateValue(Matrix.RotateY, ref _currentRotationY, -1, 0, () => _phase++);
+					_form.RotationMatrix = AnimateValue(Matrix.RotateY, ref _currentRotationY, -1, 0, () => Phase++);
 					_form.Phi = AnimateValue(f => f, ref _currentPhi, 1, float.PositiveInfinity);
 					break;
 				case 6:
@@ -99,7 +99,7 @@ namespace Week2
 
 			if (thetaAtDefault && phiAtDefault)
 			{
-				_phase++;
+				Phase++;
 			}
 		}
 
