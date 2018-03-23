@@ -167,7 +167,7 @@ namespace Week2
 
 		public static Matrix RotateX(float degrees)
 		{
-			double radians = Math.PI / 180 * degrees;
+			double radians = Deg2Rad(degrees);
 			float cos = (float) Math.Cos(radians);
 			float sin = (float) Math.Sin(radians);
 
@@ -180,7 +180,7 @@ namespace Week2
 
 		public static Matrix RotateY(float degrees)
 		{
-			double radians = Math.PI / 180 * degrees;
+			double radians = Deg2Rad(degrees);
 			float cos = (float) Math.Cos(radians);
 			float sin = (float) Math.Sin(radians);
 
@@ -193,7 +193,7 @@ namespace Week2
 
 		public static Matrix RotateZ(float degrees)
 		{
-			double radians = Math.PI / 180 * degrees;
+			double radians = Deg2Rad(degrees);
 			float cos = (float) Math.Cos(radians);
 			float sin = (float) Math.Sin(radians);
 
@@ -213,8 +213,11 @@ namespace Week2
 				0f, 0f, 0f, 1f);
 		}
 
-		public static Matrix View(float r, float theta, float phi)
+		public static Matrix View(float r, float thetaDegrees, float phiDegrees)
 		{
+			double theta = Deg2Rad(thetaDegrees);
+			double phi = Deg2Rad(phiDegrees);
+			
 			float cosTheta = (float) Math.Cos(theta);
 			float sinTheta = (float) Math.Sin(theta);
 			float cosPhi = (float) Math.Cos(phi);
@@ -243,6 +246,11 @@ namespace Week2
 				.OfType<float>()
 				.Select((value, index) => new {value, index})
 				.GroupBy(x => x.index / Width, x => x.value, (i, floats) => $"{{{string.Join(",", floats)}}}"));
+		}
+		
+		private static double Deg2Rad(float degrees)
+		{
+			return Math.PI / 180 * degrees;
 		}
 	}
 }

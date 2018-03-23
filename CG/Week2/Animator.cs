@@ -57,27 +57,27 @@ namespace Week2
 			{
 				case 0:
 					_form.ScaleMatrix = AnimateValue(Matrix.Scale, ref _currentScale, .01f, 1.49f, () => _phase++);
-					_form.Theta = AnimateValue(f => f, ref _currentTheta, -.02f, float.NegativeInfinity);
+					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 1:
 					_form.ScaleMatrix = AnimateValue(Matrix.Scale, ref _currentScale, -.01f, 1f, () => _phase++);
-					_form.Theta = AnimateValue(f => f, ref _currentTheta, -.02f, float.NegativeInfinity);
+					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 2:
 					_form.RotationMatrix = AnimateValue(Matrix.RotateX, ref _currentRotationX, 1, 45, () => _phase++);
-					_form.Theta = AnimateValue(f => f, ref _currentTheta, -.02f, float.NegativeInfinity);
+					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 3:
 					_form.RotationMatrix = AnimateValue(Matrix.RotateX, ref _currentRotationX, -1, 0, () => _phase++);
-					_form.Theta = AnimateValue(f => f, ref _currentTheta, -.02f, float.NegativeInfinity);
+					_form.Theta = AnimateValue(f => f, ref _currentTheta, -1, float.NegativeInfinity);
 					break;
 				case 4:
 					_form.RotationMatrix = AnimateValue(Matrix.RotateY, ref _currentRotationY, 1, 45, () => _phase++);
-					_form.Phi = AnimateValue(f => f, ref _currentPhi, .01f, float.PositiveInfinity);
+					_form.Phi = AnimateValue(f => f, ref _currentPhi, 1, float.PositiveInfinity);
 					break;
 				case 5:
 					_form.RotationMatrix = AnimateValue(Matrix.RotateY, ref _currentRotationY, -1, 0, () => _phase++);
-					_form.Phi = AnimateValue(f => f, ref _currentPhi, .01f, float.PositiveInfinity);
+					_form.Phi = AnimateValue(f => f, ref _currentPhi, 1, float.PositiveInfinity);
 					break;
 				case 6:
 					AnimateToDefault();
@@ -94,8 +94,8 @@ namespace Week2
 		{
 			bool thetaAtDefault = false;
 			bool phiAtDefault = false;
-			_form.Theta = AnimateValue(f => f, ref _currentTheta, .02f, Form1.StartTheta, () => thetaAtDefault = true);
-			_form.Phi = AnimateValue(f => f, ref _currentPhi, -.01f, Form1.StartPhi, () => phiAtDefault = true);
+			_form.Theta = AnimateValue(f => f, ref _currentTheta, 1, Form1.StartTheta, () => thetaAtDefault = true);
+			_form.Phi = AnimateValue(f => f, ref _currentPhi, -1, Form1.StartPhi, () => phiAtDefault = true);
 
 			if (thetaAtDefault && phiAtDefault)
 			{

@@ -98,7 +98,7 @@ namespace Week2
 			{
 				var viewMatrix = Matrix.View(R, Theta, Phi) * v;
 				var projectionMatrix = Matrix.Projection(800, viewMatrix.Z) * viewMatrix;
-				return new Vector(projectionMatrix.X + width / 2, projectionMatrix.Y + height / 2, 0);
+				return new Vector(projectionMatrix.X + width / 2, -projectionMatrix.Y + height / 2, 0);
 			});
 		}
 
