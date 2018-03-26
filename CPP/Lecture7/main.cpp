@@ -1,19 +1,58 @@
+#include "Fraction.h"
 #include <iostream>
-#include "CFraction.h"
 
 using namespace std;
 
-int main()
+
+void main()
 {
-	CFraction f1 = CFraction(50, 100);
-	CFraction f2 = CFraction(100, 2000);
-	cout << f1 << endl;
-	cout << f2 << endl;
+	Fraction f1(3, 8), f2(4, 9), f3;
+	cout << "* * *" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
 
-	f1 = f1 * f2;
-	cout << f1 << endl;
+	f3.multiply(f1, f2);
+	cout << "* * *   f3.multiply(f1, f2)" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
 
+	f3.add(f2);
+	cout << "* * *   f3.add(f2)" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
+
+	f3 = f2;
+	cout << "* * *   f3 = f2" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
+
+	f3 = f1*f2;
+	cout << "* * *   f3 = f1*f2" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
+
+	f1 *= f3;
+	cout << "* * *   f1 *= f3" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
+
+	f1 = f2 + f3;
+	cout << "* * *   f1 = f2 + f3" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
+
+	f3 += f1;
+	cout << "* * *   f3 += f1" << endl;
+	cout << "f1: " << f1 << endl;
+	cout << "f2: " << f2 << endl;
+	cout << "f3: " << f3 << endl;
 
 	cin.get();
-	return 0;
 }
