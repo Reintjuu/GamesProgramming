@@ -46,4 +46,5 @@ void main()
 	cout << "The size is: " << stack.size_recursive() << endl;
 	cout << "The sum is: " << stack.sum_recursive() << endl;
 
+	cin.get();
 }
