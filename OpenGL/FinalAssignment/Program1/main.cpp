@@ -73,6 +73,7 @@ void keyboardHandler(unsigned char key, int a, int b)
 
 void OnKeyDown()
 {
+	// Super fast asynchronous instant quit hacks.
 	if (GetAsyncKeyState(VK_ESCAPE))
 		glutExit();
 
