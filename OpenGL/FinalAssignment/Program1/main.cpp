@@ -49,10 +49,10 @@ glm::mat4 view, projection;
 
 LightSource light;
 
-Entity entities[2];
+vector<Entity> entities;
 
 // Camera.
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 7.0f));
 int currentZoom = 0;
 
 // Timing.
@@ -81,7 +81,7 @@ void OnKeyDown()
 void OnMouseMove(int x, int y)
 {
 	camera.ProcessMouseMovement(x - CENTER_X, CENTER_Y - y);
-	
+
 	// If not already, warp the cursor to the center.
 	if (x != CENTER_X || y != CENTER_Y)
 	{
@@ -106,7 +106,7 @@ void Render()
 
 	OnKeyDown();
 
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	view = camera.GetViewMatrix();
@@ -114,20 +114,24 @@ void Render()
 	projection = glm::perspective(glm::radians(camera.zoom), float(WIDTH) / HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
 
-	entities[0].Rotate(0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-	entities[1].Rotate(0.05f, glm::vec3(1.0f, 0.0f, 0.5f));
+	/*entities[0].Rotate(0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
+	entities[1].Rotate(0.05f, glm::vec3(1.0f, 0.0f, 0.5f));*/
 
 	glUseProgram(shaderID);
 
 	for (auto& entity : entities)
 	{
-		if (entity.apply_texture)
+		entity.mv = view * entity.model;
+
+		if (entity.applyTexture)
 		{
 			glUniform1i(uniform_apply_texture, 1);
 			glBindTexture(GL_TEXTURE_2D, entity.textureID);
 		}
 		else
+		{
 			glUniform1i(uniform_apply_texture, 0);
+		}
 
 		glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(entity.mv));
 		glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(entity.material.ambientColor));
@@ -182,19 +186,6 @@ void InitShaders()
 	GLuint vshID = glsl::makeVertexShader(vertexshader);
 
 	shaderID = glsl::makeShaderProgram(vshID, fshID);
-}
-
-void InitMatrices()
-{
-	view = glm::lookAt(
-		glm::vec3(0.0, 2.0, 6.0),
-		glm::vec3(1.5, 0.5, 0.0),
-		glm::vec3(0.0, 1.0, 0.0));
-
-	projection = glm::perspective(
-		glm::radians(45.0f),
-		1.0f * WIDTH / HEIGHT, 0.1f,
-		20.0f);
 }
 
 void InitBuffers()
@@ -268,17 +259,132 @@ void InitBuffers()
 	}
 }
 
+float DegToRad(float degrees)
+{
+	return degrees * glm::pi<float>() / 180;
+}
+
+void CreateStreet()
+{
+	Entity entity = Entity();
+	entity.LoadObject("Objects/street.obj", "Textures/street.bmp");
+	entity.material = Material(glm::vec3(0.3, 0.3, 0.0), glm::vec3(0.5, 0.5, 0), glm::vec3(1), 128);
+	entity.Scale(glm::vec3(2, 1, 2));
+	entity.Rotate(DegToRad(90), glm::vec3(0, 1, 0));
+	entity.Translate(glm::vec3(0, -1.1, 0));
+
+	for (int i = 0; i < 30; i++)
+	{
+		entity.Translate(glm::vec3(-1, 0, 0));
+		entities.push_back(entity);
+	}
+
+	entity.Translate(glm::vec3(30, 0, -2));
+
+	for (int i = 0; i < 30; i++)
+	{
+		entity.Translate(glm::vec3(-1, 0, 0));
+		entities.push_back(entity);
+	}
+}
+
+void CreateSidewalks()
+{
+	Entity entity = Entity();
+	entity.LoadObject("Objects/sidewalk.obj", "Textures/sidewalk.bmp");
+	entity.material = Material(glm::vec3(0.3, 0.3, 0.0), glm::vec3(0.5, 0.5, 0.0), glm::vec3(2), 16);
+	entity.Scale(glm::vec3(1));
+	entity.Translate(glm::vec3(3, -1, -1));
+
+	for (int i = 0; i < 31; i++)
+	{
+		entity.Translate(glm::vec3(0, 0, 2));
+		entities.push_back(entity);
+	}
+
+	entity.Translate(glm::vec3(-10, 0, -2 * 31));
+
+	for (int i = 0; i < 31; i++)
+	{
+		entity.Translate(glm::vec3(0, 0, 2));
+		entities.push_back(entity);
+	}
+}
+
+void CreateStreetLamps()
+{
+	Entity streetlamp = Entity();
+	streetlamp.LoadObject("Objects/streetlamp.obj", "Textures/streetlamp.bmp");
+	streetlamp.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(2), 1);
+	streetlamp.Rotate(DegToRad(90), glm::vec3(0, 1, 0));
+
+	streetlamp.Translate(glm::vec3(-6.5, -1.1, 3.5));
+	entities.push_back(streetlamp);
+
+	for (int i = 0; i < 8; i++)
+	{
+		streetlamp.Translate(glm::vec3(-7, 0, 0));
+		entities.push_back(streetlamp);
+	}
+}
+
+void CreateHouses()
+{
+	Entity house0 = Entity();
+	house0.LoadObject("Objects/house1.obj", "Textures/house3.bmp");
+	house0.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0), 1);
+	house0.Translate(glm::vec3(9, -1.1, 3));
+	house0.Rotate(DegToRad(-90), glm::vec3(0, 1, 0));
+	house0.Scale(glm::vec3(4));
+	entities.push_back(house0);
+
+	Entity house1 = Entity();
+	house1.LoadObject("Objects/house2.obj", "Textures/house1.bmp");
+	house1.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0), 1);
+	house1.Translate(glm::vec3(9, -1.1, 10));
+	house1.Rotate(DegToRad(-90), glm::vec3(0, 1, 0));
+	house1.Scale(glm::vec3(4));
+	entities.push_back(house1);
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		house0.Translate(glm::vec3(3.5, 0, 0));
+		house1.Translate(glm::vec3(3.5, 0, 0));
+
+		entities.push_back(house0);
+		entities.push_back(house1);
+	}
+}
 
 void CreateEntities()
 {
-	entities[0] = Entity(&view);
-	entities[0].LoadObject("Objects/teapot.obj", "Textures/Yellobrk.bmp");
-	entities[0].material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0), 128);
+	Entity floor = Entity();
+	floor.LoadObject("Objects/street.obj", "Textures/stonefloor.bmp");
+	floor.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(1), 128);
+	floor.Scale(glm::vec3(100, 1, 100));
+	floor.Translate(glm::vec3(0, -1.11, 0));
+	entities.push_back(floor);
 
-	entities[1] = Entity(&view);
-	entities[1].LoadObject("Objects/box.obj", "Textures/uvtemplate.bmp");
-	entities[1].material = Material(glm::vec3(0.3, 0.3, 0.0), glm::vec3(0.5, 0.5, 0.0), glm::vec3(1.0), 128);
-	entities[1].Transform(glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0)));
+	CreateStreet();
+	CreateSidewalks();
+	CreateStreetLamps();
+	CreateHouses();
+
+	Entity bench = Entity();
+	bench.LoadObject("Objects/bench.obj", "Textures/bench.bmp");
+	bench.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(6), 64);
+	bench.Translate(glm::vec3(6.2, -1.1, 1.5));
+	bench.Rotate(DegToRad(180), glm::vec3(0, 1, 0));
+	entities.push_back(bench);
+
+	Entity trashbin = Entity();
+	trashbin.LoadObject("Objects/trashbin.obj", "Textures/trashbin.bmp");
+	trashbin.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(1), 128);
+	trashbin.Translate(glm::vec3(8, -1, 6.8));
+	trashbin.Rotate(DegToRad(90), glm::vec3(0, 1, 0));
+	trashbin.Scale(glm::vec3(.8));
+	entities.push_back(trashbin);
 }
 
 
@@ -288,7 +394,6 @@ int main(int argc, char ** argv)
 	InitShaders();
 
 	CreateEntities();
-	InitMatrices();
 
 	light.position = glm::vec3(4.0, 4.0, 4.0);
 
@@ -296,6 +401,7 @@ int main(int argc, char ** argv)
 
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);
+	glClearColor(1, 1, 1, 1);
 
 	glutMainLoop();
 

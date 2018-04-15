@@ -3,24 +3,13 @@
 #include "texture.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-Entity::Entity(glm::mat4 * view)
+Entity::Entity()
 {
-	this->view = view;
-	this->Transform(glm::mat4());
-}
-
-Entity::Entity(): view(nullptr)
-{
+	Transform(glm::mat4());
 }
 
 Entity::~Entity()
 {
-}
-
-void Entity::Transform(const glm::mat4& transformation)
-{
-	model = transformation;
-	mv = *view * model;
 }
 
 void Entity::LoadObject(const char * object, const char * texture)
@@ -30,11 +19,26 @@ void Entity::LoadObject(const char * object, const char * texture)
 	if (texture != nullptr)
 	{
 		textureID = loadBMP(texture);
-		apply_texture = true;
+		applyTexture = true;
 	}
+}
+
+void Entity::Transform(const glm::mat4& transformation)
+{
+	model = transformation;
+}
+
+void Entity::Translate(const glm::vec3& translation)
+{
+	Transform(glm::translate(model, translation));
 }
 
 void Entity::Rotate(const float angle, const glm::vec3& axis)
 {
 	Transform(glm::rotate(model, angle, axis));
+}
+
+void Entity::Scale(const glm::vec3& ratio)
+{
+	Transform(glm::scale(model, ratio));
 }

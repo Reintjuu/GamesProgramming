@@ -48,22 +48,19 @@ class Entity
 public:
 	GLuint vao;
 	GLuint textureID;
-	bool apply_texture;
+	bool applyTexture;
 
 	glm::mat4 mv;
 	Material material;
 	Mesh mesh;
-
-private:
 	glm::mat4 model;
-	glm::mat4 * view;
 
-public:
 	Entity();
 	~Entity();
-	Entity(glm::mat4 * view);
 
-	void Transform(const glm::mat4& transformation);
 	void LoadObject(const char* object, const char* texture = nullptr);
+	void Transform(const glm::mat4& transformation);
+	void Translate(const glm::vec3 & translation);
 	void Rotate(const float angle, const glm::vec3& axis);
+	void Scale(const glm::vec3 & ratio);
 };
