@@ -269,6 +269,9 @@ float DegToRad(float degrees)
 	return degrees * glm::pi<float>() / 180;
 }
 
+//--------------------------------------------------------------------------------
+// Create all entities.
+//--------------------------------------------------------------------------------
 void CreateStreet()
 {
 	Entity entity = Entity();
@@ -336,7 +339,7 @@ void CreateStreetLamps()
 void CreateHouses()
 {
 	Entity house0 = Entity();
-	house0.LoadObject("Objects/house1.obj", "Textures/house3.bmp");
+	house0.LoadObject("Objects/house1.obj", "Textures/house1.bmp");
 	house0.material = Material(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0), 1);
 	house0.Translate(glm::vec3(9, -1.1, 3));
 	house0.Rotate(DegToRad(-90), glm::vec3(0, 1, 0));
