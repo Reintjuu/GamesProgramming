@@ -52,7 +52,7 @@ LightSource light;
 vector<Entity> entities;
 
 // Camera.
-Camera camera(glm::vec3(0.0f, 0.0f, 7.0f));
+Camera camera(glm::vec3(-5, 0, 8));
 int currentZoom = 0;
 
 // Timing.
@@ -62,6 +62,14 @@ float lastFrame = 0.0f;
 //--------------------------------------------------------------------------------
 // Keyboard/Mouse handling
 //--------------------------------------------------------------------------------
+
+// We're using this keyboardHandler here because a synchronous call suits better for single
+// key press detection.
+void keyboardHandler(unsigned char key, int a, int b)
+{
+	if (key == 99) // C.
+		camera.SceneFromAbove();
+}
 
 void OnKeyDown()
 {
@@ -113,10 +121,6 @@ void Render()
 
 	projection = glm::perspective(glm::radians(camera.zoom), float(WIDTH) / HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-
-	/*entities[0].Rotate(0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-	entities[1].Rotate(0.05f, glm::vec3(1.0f, 0.0f, 0.5f));*/
-
 	glUseProgram(shaderID);
 
 	for (auto& entity : entities)
@@ -159,7 +163,7 @@ void InitGlutGlew(int argc, char **argv)
 	glutInit(&argc, argv);
 
 	glutSetOption(GLUT_MULTISAMPLE, 8);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutCreateWindow("Final Assignment - Reinier de Vries");
 
@@ -168,6 +172,7 @@ void InitGlutGlew(int argc, char **argv)
 	glutMouseWheelFunc(OnScroll);
 
 	glutDisplayFunc(Render);
+	glutKeyboardFunc(keyboardHandler);
 	glutTimerFunc(DELTA, Render, 0);
 
 	glEnable(GL_MULTISAMPLE);

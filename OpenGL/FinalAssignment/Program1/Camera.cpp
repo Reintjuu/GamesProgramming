@@ -27,6 +27,13 @@ glm::mat4 Camera::GetViewMatrix()
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
+	if (viewingFromAbove)
+	{
+		ResetToOldPosition();
+		UpdateCameraVectors();
+		viewingFromAbove = false;
+	}
+
 	const float velocity = movementSpeed * deltaTime;
 	if (direction == FORWARD)
 		position += front * velocity;
@@ -70,6 +77,34 @@ void Camera::ProcessMouseScroll(float yoffset)
 		zoom = 1.0f;
 	if (zoom >= 45.0f)
 		zoom = 45.0f;
+}
+
+void Camera::ResetToOldPosition()
+{
+	position = oldPosition;
+	yaw = oldYaw;
+	pitch = oldPitch;
+}
+
+void Camera::SceneFromAbove()
+{
+	if (!viewingFromAbove)
+	{
+		oldPosition = position;
+		oldYaw = yaw;
+		oldPitch = pitch;
+
+		yaw = 60;
+		pitch = -25;
+		position = glm::vec3(-5, 10, -5);
+	}
+	else
+	{
+		ResetToOldPosition();
+	}
+
+	UpdateCameraVectors();
+	viewingFromAbove = !viewingFromAbove;
 }
 
 void Camera::UpdateCameraVectors()

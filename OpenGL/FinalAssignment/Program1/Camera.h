@@ -11,8 +11,8 @@ enum Camera_Movement
 };
 
 // Default camera values
-const float YAW = -90.0f;
-const float PITCH = 0.0f;
+const float YAW = -7;
+const float PITCH = 5;
 const float SPEED = .5f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
@@ -53,7 +53,15 @@ public:
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 	void ProcessMouseScroll(float yoffset);
 
+	void SceneFromAbove();
+
 private:
+	glm::vec3 oldPosition;
+	float oldYaw;
+	float oldPitch;
+	bool viewingFromAbove = false;
+	void ResetToOldPosition();
+
 	// Calculates the front vector from the Camera's (updated) Euler Angles
 	void UpdateCameraVectors();
 };
