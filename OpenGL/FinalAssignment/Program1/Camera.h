@@ -22,18 +22,18 @@ class Camera
 {
 public:
 	// Camera Attributes
-	glm::vec3 Position;
-	glm::vec3 Front;
-	glm::vec3 Up;
-	glm::vec3 Right;
-	glm::vec3 WorldUp;
+	glm::vec3 position;
+	glm::vec3 front;
+	glm::vec3 up;
+	glm::vec3 right;
+	glm::vec3 worldUp;
 	// Euler Angles
-	float Yaw;
-	float Pitch;
+	float yaw;
+	float pitch;
 	// Camera options
-	float MovementSpeed;
-	float MouseSensitivity;
-	float Zoom;
+	float movementSpeed;
+	float mouseSensitivity;
+	float zoom;
 
 	// Constructor with vectors
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);

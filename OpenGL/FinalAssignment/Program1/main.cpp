@@ -111,7 +111,7 @@ void Render()
 
 	view = camera.GetViewMatrix();
 
-	projection = glm::perspective(glm::radians(camera.Zoom), float(WIDTH) / HEIGHT, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(camera.zoom), float(WIDTH) / HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
 
 	entities[0].Rotate(0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
