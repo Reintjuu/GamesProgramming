@@ -113,6 +113,29 @@
       </ExcludedFromBuild>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Objects\bench.obj">
+      <FileType>Text</FileType>
+    </Text>
+    <Text Include="Objects\house1.obj">
+      <FileType>Text</FileType>
+    </Text>
+    <Text Include="Objects\house2.obj">
+      <FileType>Text</FileType>
+    </Text>
+    <Text Include="Objects\sidewalk.obj">
+      <FileType>Text</FileType>
+    </Text>
+    <Text Include="Objects\street.obj">
+      <FileType>Text</FileType>
+    </Text>
+    <Text Include="Objects\streetlamp.obj">
+      <FileType>Text</FileType>
+    </Text>
+    <Text Include="Objects\trashbin.obj">
+      <FileType>Text</FileType>
+    </Text>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />

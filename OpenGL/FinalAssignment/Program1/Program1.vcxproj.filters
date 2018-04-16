@@ -58,5 +58,12 @@
     <Text Include="vertexshader.vsh">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="Objects\bench.obj" />
+    <Text Include="Objects\house1.obj" />
+    <Text Include="Objects\house2.obj" />
+    <Text Include="Objects\sidewalk.obj" />
+    <Text Include="Objects\street.obj" />
+    <Text Include="Objects\streetlamp.obj" />
+    <Text Include="Objects\trashbin.obj" />
   </ItemGroup>
 </Project>
